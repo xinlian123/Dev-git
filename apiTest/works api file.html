@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<body>
+    Find your TestDJ Username:
+<script type='text/javascript' src='callback.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    
+function myFunction() {
+
+var data = null;    
+//callback    
+var usr = config.username;
+var pwd = config.pwd;
+var server = config.server;
+var headerUSR = config.headerUSR;
+var headerPWD = config.headerPWD;    
+
+var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+//Get input and remove white space   
+var email = document.getElementById("EMAIL").value.trim();
+if (email == null || email == "") {
+    alert("please enter your email address");
+}
+
+//Handle result    
+xhr.addEventListener("readystatechange", function () {
+  if (this.readyState === 4) {
+    console.log(this.responseText);
+	var status = xhr.status;   
+	var response = xhr.responseText.split(":");
+	alert(status);
+	if (status == 200) {
+        for (var i = 0; i < response.length; i++) {
+            if(response[i].includes("uid")) {
+                alert(response[i + 1].substring( 0, response[i + 1].indexOf(",")));
+            }
+        }
+	
+	} else {
+	alert("api failed");
+	}
+  }
+});
+
+xhr.open("GET", server + "?_queryFilter=mail%20eq%20%22" + email + "%22");
+xhr.setRequestHeader(headerUSR, usr);
+xhr.setRequestHeader(headerPWD, pwd);
+
+xhr.send(data);
+
+}
+</script>
+
+<p>EMAIL: <input type="text" id="EMAIL" onkeydown = "if (event.keyCode == 13)
+                        document.getElementById('myButton').click()"></p>
+<button id="myButton" onclick="myFunction()">Submit</button>
+
+</body>
+</html>
